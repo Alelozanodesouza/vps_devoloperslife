@@ -1,0 +1,138 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1.5rem 0}
+.search-bar{display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;padding:0 0.25rem}
+.search-bar input{flex:1;padding:8px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:14px;background:var(--color-background-primary);color:var(--color-text-primary)}
+.search-bar input:focus{outline:none;border-color:var(--color-border-primary)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;padding:0 0.25rem}
+.pill{font-size:12px;padding:4px 12px;border-radius:20px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s}
+.pill.active,.pill:hover{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.pill.active{font-weight:500}
+table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}
+thead tr{border-bottom:1px solid var(--color-border-secondary)}
+th{text-align:left;padding:10px 12px;font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em}
+th:nth-child(1){width:28%}
+th:nth-child(2){width:9%}
+th:nth-child(3){width:38%}
+th:nth-child(4){width:25%}
+td{padding:10px 12px;vertical-align:top;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);line-height:1.5}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--color-background-secondary)}
+code{font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;color:var(--color-text-primary);word-break:break-all;display:inline-block}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:500;white-space:nowrap}
+.badge.nav{background:#E1F5EE;color:#0F6E56}
+.badge.arquivo{background:#E6F1FB;color:#185FA5}
+.badge.sistema{background:#FAEEDA;color:#854F0B}
+.badge.docker{background:#EEEDFE;color:#534AB7}
+.badge.rede{background:#FAECE7;color:#993C1D}
+.badge.firewall{background:#FCEBEB;color:#A32D2D}
+.badge.banco{background:#EAF3DE;color:#3B6D11}
+.empty{text-align:center;padding:3rem;color:var(--color-text-secondary);font-size:14px}
+.count{font-size:12px;color:var(--color-text-secondary);margin-bottom:0.75rem;padding:0 0.25rem}
+</style>
+<h2 class="sr-only">Tabela de referência de comandos Linux para VPS</h2>
+<div class="wrap">
+  <div class="search-bar">
+    <i class="ti ti-search" style="color:var(--color-text-secondary);font-size:16px" aria-hidden="true"></i>
+    <input type="text" id="busca" placeholder="Buscar por comando ou função..." oninput="filtrar()">
+  </div>
+  <div class="filters">
+    <span class="pill active" onclick="setCateg('todos',this)">Todos</span>
+    <span class="pill" onclick="setCateg('nav',this)">Navegação</span>
+    <span class="pill" onclick="setCateg('arquivo',this)">Arquivos</span>
+    <span class="pill" onclick="setCateg('sistema',this)">Sistema</span>
+    <span class="pill" onclick="setCateg('docker',this)">Docker</span>
+    <span class="pill" onclick="setCateg('rede',this)">Rede</span>
+    <span class="pill" onclick="setCateg('firewall',this)">Firewall</span>
+    <span class="pill" onclick="setCateg('banco',this)">Banco de dados</span>
+  </div>
+  <div class="count" id="count"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Comando</th>
+        <th>Categoria</th>
+        <th>O que faz</th>
+        <th>Analogia para leigos</th>
+      </tr>
+    </thead>
+    <tbody id="tabela"></tbody>
+  </table>
+  <div class="empty" id="vazio" style="display:none">Nenhum comando encontrado.</div>
+</div>
+<script>
+const dados=[
+  {cmd:"pwd",cat:"nav",desc:"Mostra em qual pasta você está no momento",leigo:"Como olhar o endereço da rua onde você está"},
+  {cmd:"ls",cat:"nav",desc:"Lista os arquivos e pastas dentro da pasta atual",leigo:"Como abrir uma pasta no Explorador de Arquivos e ver o conteúdo"},
+  {cmd:"ls -lh",cat:"nav",desc:"Lista arquivos com detalhes: tamanho, data e permissões",leigo:"Ver os arquivos com informações detalhadas como no modo 'detalhes' do Windows"},
+  {cmd:"cd /caminho",cat:"nav",desc:"Entra em uma pasta específica",leigo:"Dar duplo clique em uma pasta para abri-la"},
+  {cmd:"cd ..",cat:"nav",desc:"Volta para a pasta anterior (subir um nível)",leigo:"Clicar na seta 'voltar' no Explorador de Arquivos"},
+  {cmd:"find . -type f",cat:"nav",desc:"Lista todos os arquivos dentro da pasta atual e subpastas",leigo:"Usar a busca do Windows para encontrar todos os arquivos de uma pasta"},
+  {cmd:"mkdir -p /pasta",cat:"arquivo",desc:"Cria uma nova pasta (e as pastas do caminho se não existirem)",leigo:"Criar uma nova pasta, igual ao botão direito > Nova pasta no Windows"},
+  {cmd:"cat arquivo.txt",cat:"arquivo",desc:"Exibe o conteúdo de um arquivo na tela",leigo:"Abrir um arquivo de texto para lê-lo, sem poder editar"},
+  {cmd:"cat > arquivo << 'EOF'",cat:"arquivo",desc:"Cria um arquivo e escreve conteúdo dentro dele",leigo:"Criar um novo documento Word e digitar o texto nele"},
+  {cmd:"nano arquivo.txt",cat:"arquivo",desc:"Abre um editor de texto simples para editar o arquivo",leigo:"Abrir um arquivo no Bloco de Notas para editar"},
+  {cmd:"rm arquivo.txt",cat:"arquivo",desc:"Apaga um arquivo permanentemente",leigo:"Deletar um arquivo — sem lixeira, sem desfazer"},
+  {cmd:"rm -rf /pasta",cat:"arquivo",desc:"Apaga uma pasta e tudo dentro dela, sem pedir confirmação",leigo:"Shift+Delete em uma pasta inteira no Windows"},
+  {cmd:"cp origem destino",cat:"arquivo",desc:"Copia um arquivo de um lugar para outro",leigo:"Copiar e colar um arquivo no Windows"},
+  {cmd:"mv origem destino",cat:"arquivo",desc:"Move ou renomeia um arquivo",leigo:"Recortar e colar, ou renomear um arquivo no Windows"},
+  {cmd:"sed -i 's/antigo/novo/' arq",cat:"arquivo",desc:"Encontra e substitui um texto dentro de um arquivo",leigo:"Usar Ctrl+H (localizar e substituir) no Word ou Bloco de Notas"},
+  {cmd:"grep -i 'palavra' arquivo",cat:"arquivo",desc:"Busca linhas que contêm uma palavra específica",leigo:"Usar Ctrl+F para buscar uma palavra dentro de um documento"},
+  {cmd:"apt update",cat:"sistema",desc:"Busca a lista de atualizações disponíveis para o sistema",leigo:"Verificar se há atualizações no Windows Update"},
+  {cmd:"apt upgrade -y",cat:"sistema",desc:"Instala todas as atualizações disponíveis",leigo:"Instalar as atualizações do Windows Update sem confirmar cada uma"},
+  {cmd:"apt install programa -y",cat:"sistema",desc:"Instala um programa no servidor",leigo:"Baixar e instalar um aplicativo pela loja de apps"},
+  {cmd:"reboot",cat:"sistema",desc:"Reinicia o servidor",leigo:"Clicar em Iniciar > Reiniciar no Windows"},
+  {cmd:"lsb_release -a",cat:"sistema",desc:"Mostra a versão do sistema operacional instalado",leigo:"Ver nas configurações do sistema qual versão do Windows você tem"},
+  {cmd:"sleep 30",cat:"sistema",desc:"Pausa a execução por 30 segundos antes de continuar",leigo:"Aguardar um temporizador antes de fazer a próxima ação"},
+  {cmd:"chown -R 1000 /pasta",cat:"sistema",desc:"Muda o dono de uma pasta para outro usuário",leigo:"Transferir a propriedade de um arquivo para outra pessoa"},
+  {cmd:"&&",cat:"sistema",desc:"Executa o próximo comando só se o anterior funcionou",leigo:"Só continue para o próximo passo se o atual der certo"},
+  {cmd:"| (pipe)",cat:"sistema",desc:"Passa o resultado de um comando como entrada para outro",leigo:"Uma esteira onde a saída de uma máquina alimenta a próxima"},
+  {cmd:"docker-compose up -d",cat:"docker",desc:"Inicia todos os contêineres definidos no arquivo de configuração",leigo:"Ligar todos os programas do servidor de uma vez"},
+  {cmd:"docker-compose down",cat:"docker",desc:"Para e remove todos os contêineres em execução",leigo:"Desligar todos os programas do servidor de uma vez"},
+  {cmd:"docker-compose ps",cat:"docker",desc:"Lista os contêineres e mostra se estão ligados ou desligados",leigo:"Ver no Gerenciador de Tarefas quais programas estão rodando"},
+  {cmd:"docker-compose restart nome",cat:"docker",desc:"Reinicia um contêiner específico sem afetar os outros",leigo:"Fechar e reabrir somente um programa específico"},
+  {cmd:"docker-compose up -d --build",cat:"docker",desc:"Inicia os contêineres e reconstrói as imagens antes",leigo:"Reinstalar um programa e depois abri-lo"},
+  {cmd:"docker logs nome --tail 30",cat:"docker",desc:"Mostra as últimas 30 linhas do histórico de atividades",leigo:"Ver as últimas entradas do diário de atividades de um programa"},
+  {cmd:"docker logs nome -f",cat:"docker",desc:"Mostra os logs em tempo real, atualizando conforme eventos acontecem",leigo:"Assistir ao diário de atividades ao vivo, como uma transmissão"},
+  {cmd:"docker exec nome comando",cat:"docker",desc:"Executa um comando dentro de um contêiner em execução",leigo:"Abrir o terminal dentro de um programa que já está rodando"},
+  {cmd:"docker --version",cat:"docker",desc:"Mostra a versão do Docker instalada",leigo:"Verificar qual versão de um programa está instalada"},
+  {cmd:"curl http://endereço",cat:"rede",desc:"Faz uma requisição para um endereço e mostra a resposta",leigo:"Acessar um site e ver o que ele responde, sem abrir o navegador"},
+  {cmd:"curl -X POST -d dados url",cat:"rede",desc:"Envia dados para um endereço (como preencher e enviar um formulário)",leigo:"Preencher um formulário online e clicar em Enviar"},
+  {cmd:"curl -H 'chave: valor' url",cat:"rede",desc:"Adiciona um cabeçalho à requisição (como uma credencial de acesso)",leigo:"Apresentar um cartão de identificação antes de entrar em algum lugar"},
+  {cmd:"curl -I https://site.com",cat:"rede",desc:"Verifica se um endereço está acessível sem baixar o conteúdo",leigo:"Bater na porta para ver se alguém atende, sem entrar"},
+  {cmd:"ufw allow 22",cat:"firewall",desc:"Libera a porta 22 no firewall (acesso SSH ao servidor)",leigo:"Abrir a porta de entrada do servidor para você entrar pelo terminal"},
+  {cmd:"ufw allow 8080",cat:"firewall",desc:"Libera a porta 8080 para acesso externo",leigo:"Abrir uma janela específica do servidor para o mundo acessar"},
+  {cmd:"ufw --force enable",cat:"firewall",desc:"Ativa o firewall sem pedir confirmação",leigo:"Ligar o sistema de segurança do servidor"},
+  {cmd:"ufw status",cat:"firewall",desc:"Mostra quais portas estão abertas ou fechadas no firewall",leigo:"Ver o painel de controle das portas abertas no servidor"},
+  {cmd:"psql -U user -d banco -c 'SQL'",cat:"banco",desc:"Executa um comando SQL diretamente no banco de dados PostgreSQL",leigo:"Abrir o banco de dados e fazer uma consulta ou modificação"},
+  {cmd:"SELECT * FROM Tabela;",cat:"banco",desc:"Busca e exibe todos os registros de uma tabela no banco de dados",leigo:"Abrir uma planilha e ver todas as linhas de uma vez"},
+  {cmd:"DELETE FROM Tabela WHERE ...",cat:"banco",desc:"Remove registros específicos do banco de dados",leigo:"Apagar linhas específicas de uma planilha pelo conteúdo da célula"},
+];
+let categAtiva='todos';
+function badge(cat){const m={nav:'Navegação',arquivo:'Arquivos',sistema:'Sistema',docker:'Docker',rede:'Rede',firewall:'Firewall',banco:'Banco de dados'};return`<span class="badge ${cat}">${m[cat]||cat}</span>`}
+function filtrar(){
+  const q=document.getElementById('busca').value.toLowerCase();
+  const rows=dados.filter(d=>{
+    const passaCateg=categAtiva==='todos'||d.cat===categAtiva;
+    const passaBusca=!q||d.cmd.toLowerCase().includes(q)||d.desc.toLowerCase().includes(q)||d.leigo.toLowerCase().includes(q);
+    return passaCateg&&passaBusca;
+  });
+  const tb=document.getElementById('tabela');
+  const vazio=document.getElementById('vazio');
+  const count=document.getElementById('count');
+  if(rows.length===0){tb.innerHTML='';vazio.style.display='block';}
+  else{
+    vazio.style.display='none';
+    tb.innerHTML=rows.map(d=>`<tr><td><code>${d.cmd}</code></td><td>${badge(d.cat)}</td><td>${d.desc}</td><td style="color:var(--color-text-secondary);font-size:13px">${d.leigo}</td></tr>`).join('');
+  }
+  count.textContent=`${rows.length} comando${rows.length!==1?'s':''} encontrado${rows.length!==1?'s':''}`;
+}
+function setCateg(c,el){
+  categAtiva=c;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  filtrar();
+}
+filtrar();
+</script>
