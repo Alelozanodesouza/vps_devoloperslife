@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comandos VPS — Referência Completa</title>
+  <title>Guia VPS — tabellion.tech</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,20 +26,198 @@
       font-family: var(--sans);
       font-size: 15px;
       line-height: 1.6;
-      padding: 2rem 1rem;
     }
 
-    .container { max-width: 1100px; margin: 0 auto; }
+    /* ── navegação ── */
+    nav {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      display: block;
+      padding: 1rem 1.25rem;
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+    }
+    nav a:hover { color: var(--text); }
+    nav a.ativo { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+    nav .logo { font-weight: 600; color: var(--text); margin-right: auto; }
 
-    header { margin-bottom: 2rem; }
-    header h1 {
-      font-size: 1.6rem;
+    /* ── layout ── */
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    section { margin-bottom: 4rem; }
+
+    h2 {
+      font-size: 1.4rem;
       font-weight: 600;
+      margin-bottom: 0.4rem;
       color: var(--text);
-      margin-bottom: 0.3rem;
     }
-    header p { color: var(--muted); font-size: 0.9rem; }
+    .subtitulo-secao {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
 
+    /* ── passos ── */
+    .passos { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .passo {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .passo-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: #fafaf7;
+    }
+
+    .numero {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .passo-titulo { font-weight: 600; font-size: 15px; flex: 1; }
+    .passo-tempo {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 10px;
+    }
+
+    .passo-corpo { padding: 1.25rem; }
+
+    .descricao {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 1rem;
+    }
+
+    .cmd-lista { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .cmd-item {
+      background: #f5f3ed;
+      border: 1px solid #e8e5dc;
+      border-radius: 8px;
+      padding: 0.6rem 0.875rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .cmd-item code {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #1a1a18;
+      flex: 1;
+      word-break: break-all;
+    }
+
+    .cmd-item .nota {
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 4px;
+      font-style: italic;
+    }
+
+    .cmd-bloco {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .aviso {
+      background: #fef9ec;
+      border: 1px solid #f0d97a;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 13px;
+      color: #7a5c08;
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .info {
+      background: var(--accent-light);
+      border: 1px solid #b2dcc8;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 13px;
+      color: #0d4d2e;
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .dns-tabela {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 0.75rem;
+    }
+    .dns-tabela th {
+      text-align: left;
+      padding: 6px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dns-tabela td {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    .resultado {
+      background: #111;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+    }
+    .resultado code {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #4ade80;
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      display: block;
+      line-height: 1.7;
+    }
+
+    /* ── tabela de comandos ── */
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -53,17 +231,9 @@
       flex: 1;
       min-width: 200px;
     }
-    .search-wrap svg {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-    }
     .search-wrap input {
       width: 100%;
-      padding: 8px 12px 8px 34px;
+      padding: 8px 12px 8px 14px;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 14px;
@@ -90,11 +260,7 @@
     .pill:hover { border-color: var(--border-hover); color: var(--text); }
     .pill.ativo { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
 
-    .contagem {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
+    .contagem { font-size: 13px; color: var(--muted); margin-bottom: 0.75rem; }
 
     .tabela-wrap {
       background: var(--card);
@@ -103,12 +269,7 @@
       overflow: hidden;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
     thead tr { background: var(--bg); border-bottom: 1px solid var(--border); }
     th {
       text-align: left;
@@ -118,9 +279,7 @@
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .06em;
-      white-space: nowrap;
     }
-
     td {
       padding: 10px 14px;
       vertical-align: top;
@@ -130,8 +289,7 @@
     }
     tr:last-child td { border-bottom: none; }
     tbody tr:hover td { background: #fbfaf7; }
-
-    code {
+    td code {
       font-family: var(--mono);
       font-size: 12px;
       background: #f0ede6;
@@ -157,77 +315,357 @@
     .cat-rede     { background: #faece7; color: #8c3218; }
     .cat-firewall { background: #fcebeb; color: #962828; }
     .cat-banco    { background: #eaf3de; color: #2e5e10; }
-
     .analogia { color: var(--muted); font-size: 13px; }
 
-    .vazio {
-      text-align: center;
-      padding: 3rem;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    .vazio { text-align: center; padding: 3rem; color: var(--muted); font-size: 14px; }
 
     @media (max-width: 640px) {
       th:nth-child(4), td:nth-child(4) { display: none; }
       th:nth-child(2), td:nth-child(2) { display: none; }
+      nav a:not(.logo) { padding: 1rem 0.75rem; font-size: 13px; }
     }
   </style>
 </head>
 <body>
+
+<nav>
+  <a href="#" class="logo">tabellion.tech</a>
+  <a href="#deploy" class="ativo" onclick="ativarNav(this)">Como subir o site</a>
+  <a href="#referencia" onclick="ativarNav(this)">Referência de comandos</a>
+</nav>
+
 <div class="container">
 
-  <header>
-    <h1>Comandos VPS — Referência Completa</h1>
-    <p>Guia de comandos Linux para iniciantes. Use a busca ou os filtros por categoria.</p>
-  </header>
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 1 — PASSO A PASSO DO DEPLOY
+  ══════════════════════════════════════════ -->
+  <section id="deploy">
+    <h2>Como colocamos este site no ar</h2>
+    <p class="subtitulo-secao">Passo a passo completo — desde o primeiro acesso à VPS até o site funcionando com HTTPS.</p>
 
-  <div class="controls">
-    <div class="search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      <input type="text" id="busca" placeholder="Buscar comando ou descrição..." oninput="filtrar()">
+    <div class="passos">
+
+      <!-- PASSO 1 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">1</div>
+          <div class="passo-titulo">Contratar a VPS</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">Acessamos o painel, escolhemos o plano com a melhor configuração e preparamos o servidor com Ubuntu, depois escolha a localização do servidor.</p>
+          <div class="info">&#9432; Após a compra, o painel mostra o IP da VPS. Anote o IP que aparecer — você vai usar.</div>
+        </div>
+      </div>
+
+      <!-- PASSO 2 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">2</div>
+          <div class="passo-titulo">Primeiro acesso ao terminal</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">Abrimos o terminal direto pelo hPanel O terminal é a janela preta onde digitamos comandos para controlar o servidor.</p>
+          <div class="resultado">
+            <code>Welcome to Ubuntu</code>
+            <code>usuario@servidor:~#</code>
+          </div>
+          <div class="aviso">&#9888; O símbolo <strong>#</strong> no final indica que você está como administrador (root) — o usuário com poder total sobre o servidor.</div>
+        </div>
+      </div>
+
+      <!-- PASSO 3 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">3</div>
+          <div class="passo-titulo">Atualizar o sistema</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">Antes de qualquer coisa, atualizamos todos os programas do servidor para as versões mais recentes. É como instalar as atualizações do Windows antes de usar o computador.</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>apt update && apt upgrade -y</code>
+              <span class="nota">Busca e instala todas as atualizações disponíveis. O -y confirma tudo automaticamente.</span>
+            </div>
+          </div>
+          <div class="aviso">&#9888; Se aparecerem telas roxas durante a atualização, pressione Enter para confirmar e continuar.</div>
+        </div>
+      </div>
+
+      <!-- PASSO 4 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">4</div>
+          <div class="passo-titulo">Configurar o firewall e abrir as portas</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">O firewall é como um porteiro do servidor — ele controla quais "portas" (canais de comunicação) ficam abertas para o mundo. Precisamos abrir as portas que os serviços usam.</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>ufw allow 22</code>
+              <span class="nota">Porta 22 = SSH (seu acesso ao terminal). NUNCA feche essa porta ou perde o acesso.</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>ufw allow 80</code>
+              <span class="nota">Porta 80 = HTTP (site sem cadeado)</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>ufw allow 443</code>
+              <span class="nota">Porta 443 = HTTPS (site com cadeado)</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>ufw --force enable</code>
+              <span class="nota">Liga o firewall com as regras que definimos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSO 5 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">5</div>
+          <div class="passo-titulo">Instalar o Nginx (servidor web)</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">O Nginx é o programa que fica "escutando" as visitas ao site e entrega as páginas para o navegador do visitante. Sem ele, o site não aparece.</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>apt install nginx -y</code>
+              <span class="nota">Instala o Nginx</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>systemctl status nginx</code>
+              <span class="nota">Verifica se está rodando. Deve aparecer "active (running)"</span>
+            </div>
+          </div>
+          <div class="info">&#9432; Após instalar, acesse http://SEU_IP_DA_VPS no navegador (substitua pelo IP da sua VPS) — se aparecer a página padrão do Nginx, está funcionando.</div>
+        </div>
+      </div>
+
+      <!-- PASSO 6 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">6</div>
+          <div class="passo-titulo">Instalar o Git e clonar o repositório</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">O Git é o programa que permite baixar o código do GitHub diretamente para a VPS. Em vez de enviar arquivos manualmente, o servidor puxa os arquivos do repositório.</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>apt install git -y</code>
+              <span class="nota">Instala o Git na VPS</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>git clone https://github.com/SEU_USUARIO/SEU_REPO.git /var/www/tabellion</code>
+              <span class="nota">Baixa todos os arquivos do GitHub para a pasta /var/www/tabellion</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>ls /var/www/tabellion</code>
+              <span class="nota">Confirma que os arquivos chegaram</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSO 7 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">7</div>
+          <div class="passo-titulo">Configurar o Nginx para o site</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">Criamos um arquivo de configuração dizendo ao Nginx onde estão os arquivos do nosso site e qual domínio deve responder.</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>nano /etc/nginx/sites-available/tabellion</code>
+              <span class="nota">Cria e abre o arquivo de configuração</span>
+            </div>
+          </div>
+          <div style="background:#111;border-radius:8px;padding:1rem;margin:0.75rem 0">
+            <code style="font-family:'Courier New',monospace;font-size:12px;color:#4ade80;display:block;line-height:1.8">
+              server {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;listen 80;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;listen [::]:80;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;server_name tabellion.tech www.tabellion.tech;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;root /var/www/tabellion;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;index index.html;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;location / {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try_files $uri $uri/ =404;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+              }
+            </code>
+          </div>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>ln -s /etc/nginx/sites-available/tabellion /etc/nginx/sites-enabled/</code>
+              <span class="nota">Ativa a configuração</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>rm /etc/nginx/sites-enabled/default</code>
+              <span class="nota">Remove a página padrão do Nginx</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>nginx -t && systemctl reload nginx</code>
+              <span class="nota">Testa a configuração e aplica as mudanças</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSO 8 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">8</div>
+          <div class="passo-titulo">Apontar o domínio para a VPS (DNS)</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">O DNS é como uma lista telefônica da internet: quando alguém digita seudominio.com, o DNS converte esse nome no IP da sua VPS. Essa configuração é feita no painel onde o domínio foi registrado.</p>
+          <table class="dns-tabela">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Nome</th>
+                <th>Valor</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A</td>
+                <td>@</td>
+                <td>SEU_IP_DA_VPS</td>
+                <td style="font-family:var(--sans);font-size:12px;color:#6b6a64">seudominio.com → VPS</td>
+              </tr>
+              <tr>
+                <td>A</td>
+                <td>www</td>
+                <td>SEU_IP_DA_VPS</td>
+                <td style="font-family:var(--sans);font-size:12px;color:#6b6a64">www.seudominio.com → VPS</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="aviso">&#9888; Após salvar o DNS, aguarde entre 30 minutos e 24 horas para propagar. Verifique com: <strong>ping tabellion.tech</strong></div>
+        </div>
+      </div>
+
+      <!-- PASSO 9 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">9</div>
+          <div class="passo-titulo">Ativar HTTPS com certificado SSL gratuito</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">O HTTPS é o cadeado que aparece no navegador, indicando que a conexão é segura. Usamos o Certbot com o Let's Encrypt, um serviço gratuito que fornece certificados de segurança.</p>
+          <div class="aviso">&#9888; Só execute esse passo depois que o DNS propagar. O Certbot precisa que o domínio já aponte para a VPS.</div>
+          <div class="cmd-lista" style="margin-top:0.75rem">
+            <div class="cmd-item cmd-bloco">
+              <code>apt install certbot python3-certbot-nginx -y</code>
+              <span class="nota">Instala o Certbot</span>
+            </div>
+            <div class="cmd-item cmd-bloco">
+              <code>certbot --nginx -d tabellion.tech -d www.tabellion.tech</code>
+              <span class="nota">Gera o certificado e configura o Nginx automaticamente. Pedirá seu e-mail.</span>
+            </div>
+          </div>
+          <div class="info">&#9432; O Certbot renova o certificado automaticamente a cada 90 dias — você não precisa fazer nada.</div>
+        </div>
+      </div>
+
+      <!-- PASSO 10 -->
+      <div class="passo">
+        <div class="passo-header">
+          <div class="numero">10</div>
+          <div class="passo-titulo">Site no ar — como atualizar no futuro</div>
+          
+        </div>
+        <div class="passo-corpo">
+          <p class="descricao">Com o GitHub conectado, atualizar o site é simples. No seu computador, você envia as mudanças para o GitHub. Na VPS, um comando baixa as atualizações.</p>
+          <p style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:0.5rem;margin-top:0.5rem">No seu computador:</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>git add . && git commit -m "descrição da mudança" && git push</code>
+              <span class="nota">Salva e envia as alterações para o GitHub</span>
+            </div>
+          </div>
+          <p style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:0.5rem;margin-top:0.75rem">Na VPS:</p>
+          <div class="cmd-lista">
+            <div class="cmd-item cmd-bloco">
+              <code>cd /var/www/tabellion && git pull</code>
+              <span class="nota">Baixa as mudanças do GitHub e atualiza o site instantaneamente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="filtros">
-      <span class="pill ativo" onclick="setCateg('todos',this)">Todos</span>
-      <span class="pill" onclick="setCateg('nav',this)">Navegação</span>
-      <span class="pill" onclick="setCateg('arquivo',this)">Arquivos</span>
-      <span class="pill" onclick="setCateg('sistema',this)">Sistema</span>
-      <span class="pill" onclick="setCateg('docker',this)">Docker</span>
-      <span class="pill" onclick="setCateg('rede',this)">Rede</span>
-      <span class="pill" onclick="setCateg('firewall',this)">Firewall</span>
-      <span class="pill" onclick="setCateg('banco',this)">Banco de dados</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SEÇÃO 2 — TABELA DE REFERÊNCIA
+  ══════════════════════════════════════════ -->
+  <section id="referencia">
+    <h2>Referência de comandos</h2>
+    <p class="subtitulo-secao">Todos os comandos usados, com descrição e analogia para quem está começando.</p>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <input type="text" id="busca" placeholder="Buscar por comando ou função..." oninput="filtrar()">
+      </div>
+      <div class="filtros">
+        <span class="pill ativo" onclick="setCateg('todos',this)">Todos</span>
+        <span class="pill" onclick="setCateg('nav',this)">Navegação</span>
+        <span class="pill" onclick="setCateg('arquivo',this)">Arquivos</span>
+        <span class="pill" onclick="setCateg('sistema',this)">Sistema</span>
+        <span class="pill" onclick="setCateg('docker',this)">Docker</span>
+        <span class="pill" onclick="setCateg('rede',this)">Rede</span>
+        <span class="pill" onclick="setCateg('firewall',this)">Firewall</span>
+        <span class="pill" onclick="setCateg('banco',this)">Banco de dados</span>
+      </div>
     </div>
-  </div>
 
-  <p class="contagem" id="contagem"></p>
+    <p class="contagem" id="contagem"></p>
 
-  <div class="tabela-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="width:26%">Comando</th>
-          <th style="width:11%">Categoria</th>
-          <th style="width:36%">O que faz</th>
-          <th style="width:27%">Analogia para leigos</th>
-        </tr>
-      </thead>
-      <tbody id="tabela"></tbody>
-    </table>
-    <div class="vazio" id="vazio" style="display:none">Nenhum comando encontrado.</div>
-  </div>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:26%">Comando</th>
+            <th style="width:11%">Categoria</th>
+            <th style="width:36%">O que faz</th>
+            <th style="width:27%">Analogia para leigos</th>
+          </tr>
+        </thead>
+        <tbody id="tabela"></tbody>
+      </table>
+      <div class="vazio" id="vazio" style="display:none">Nenhum comando encontrado.</div>
+    </div>
+  </section>
 
 </div>
 
 <script>
+function ativarNav(el) {
+  document.querySelectorAll("nav a:not(.logo)").forEach(a => a.classList.remove("ativo"));
+  el.classList.add("ativo");
+}
+
 const dados = [
   {cmd:"pwd", cat:"nav", desc:"Mostra em qual pasta você está no momento", leigo:"Como olhar o endereço da rua onde você está"},
   {cmd:"ls", cat:"nav", desc:"Lista os arquivos e pastas dentro da pasta atual", leigo:"Abrir uma pasta no Explorador de Arquivos e ver o conteúdo"},
   {cmd:"ls -lh", cat:"nav", desc:"Lista arquivos com detalhes: tamanho, data e permissões", leigo:"Ver os arquivos no modo 'detalhes' do Windows"},
-  {cmd:"cd /caminho", cat:"nav", desc:"Entra em uma pasta específica", leigo:"Dar duplo clique em uma pasta para abrí-la"},
+  {cmd:"cd /caminho", cat:"nav", desc:"Entra em uma pasta específica", leigo:"Dar duplo clique em uma pasta para abri-la"},
   {cmd:"cd ..", cat:"nav", desc:"Volta para a pasta anterior (sobe um nível)", leigo:"Clicar na seta 'voltar' no Explorador de Arquivos"},
   {cmd:"find . -type f", cat:"nav", desc:"Lista todos os arquivos dentro da pasta atual e subpastas", leigo:"Usar a busca do Windows para encontrar todos os arquivos de uma pasta"},
-  {cmd:"mkdir -p /pasta", cat:"arquivo", desc:"Cria uma nova pasta (e as pastas do caminho se não existirem)", leigo:"Criar uma nova pasta, igual ao botão direito > Nova pasta no Windows"},
+  {cmd:"mkdir -p /pasta", cat:"arquivo", desc:"Cria uma nova pasta e as pastas do caminho se não existirem", leigo:"Criar uma nova pasta, igual ao botão direito > Nova pasta no Windows"},
   {cmd:"cat arquivo.txt", cat:"arquivo", desc:"Exibe o conteúdo de um arquivo na tela", leigo:"Abrir um arquivo de texto para lê-lo, sem poder editar"},
   {cmd:"cat > arquivo << 'EOF'", cat:"arquivo", desc:"Cria um arquivo e escreve conteúdo dentro dele", leigo:"Criar um novo documento e digitar o texto nele"},
   {cmd:"nano arquivo.txt", cat:"arquivo", desc:"Abre um editor de texto simples para editar o arquivo", leigo:"Abrir um arquivo no Bloco de Notas para editar"},
@@ -256,11 +694,12 @@ const dados = [
   {cmd:"docker exec nome comando", cat:"docker", desc:"Executa um comando dentro de um contêiner em execução", leigo:"Abrir o terminal dentro de um programa que já está rodando"},
   {cmd:"docker --version", cat:"docker", desc:"Mostra a versão do Docker instalada", leigo:"Verificar qual versão de um programa está instalada"},
   {cmd:"curl http://endereço", cat:"rede", desc:"Faz uma requisição para um endereço e mostra a resposta", leigo:"Acessar um site e ver o que ele responde, sem abrir o navegador"},
-  {cmd:"curl -X POST -d dados url", cat:"rede", desc:"Envia dados para um endereço (como preencher e enviar um formulário)", leigo:"Preencher um formulário online e clicar em Enviar"},
-  {cmd:"curl -H 'chave: valor' url", cat:"rede", desc:"Adiciona um cabeçalho à requisição (como uma credencial de acesso)", leigo:"Apresentar um cartão de identificação antes de entrar em algum lugar"},
+  {cmd:"curl -X POST -d dados url", cat:"rede", desc:"Envia dados para um endereço, como preencher e enviar um formulário", leigo:"Preencher um formulário online e clicar em Enviar"},
+  {cmd:"curl -H 'chave: valor' url", cat:"rede", desc:"Adiciona um cabeçalho à requisição, como uma credencial de acesso", leigo:"Apresentar um cartão de identificação antes de entrar em algum lugar"},
   {cmd:"curl -I https://site.com", cat:"rede", desc:"Verifica se um endereço está acessível sem baixar o conteúdo", leigo:"Bater na porta para ver se alguém atende, sem entrar"},
-  {cmd:"ufw allow 22", cat:"firewall", desc:"Libera a porta 22 no firewall (acesso SSH ao servidor)", leigo:"Abrir a porta de entrada do servidor para você entrar pelo terminal"},
-  {cmd:"ufw allow 8080", cat:"firewall", desc:"Libera a porta 8080 para acesso externo", leigo:"Abrir uma janela específica do servidor para o mundo acessar"},
+  {cmd:"ufw allow 22", cat:"firewall", desc:"Libera a porta 22 no firewall — acesso SSH ao servidor", leigo:"Abrir a porta de entrada do servidor para você entrar pelo terminal"},
+  {cmd:"ufw allow 80", cat:"firewall", desc:"Libera a porta 80 — HTTP, site sem cadeado", leigo:"Abrir a janela do site para visitantes normais"},
+  {cmd:"ufw allow 443", cat:"firewall", desc:"Libera a porta 443 — HTTPS, site com cadeado", leigo:"Abrir a janela segura do site para visitantes"},
   {cmd:"ufw --force enable", cat:"firewall", desc:"Ativa o firewall sem pedir confirmação", leigo:"Ligar o sistema de segurança do servidor"},
   {cmd:"ufw status", cat:"firewall", desc:"Mostra quais portas estão abertas ou fechadas no firewall", leigo:"Ver o painel de controle das portas abertas no servidor"},
   {cmd:"psql -U user -d banco -c 'SQL'", cat:"banco", desc:"Executa um comando SQL diretamente no banco de dados PostgreSQL", leigo:"Abrir o banco de dados e fazer uma consulta ou modificação"},
@@ -285,9 +724,7 @@ function filtrar() {
 
   const tb = document.getElementById("tabela");
   const vazio = document.getElementById("vazio");
-  const cont = document.getElementById("contagem");
-
-  cont.textContent = `${rows.length} comando${rows.length !== 1 ? "s" : ""} encontrado${rows.length !== 1 ? "s" : ""}`;
+  document.getElementById("contagem").textContent = `${rows.length} comando${rows.length !== 1 ? "s" : ""} encontrado${rows.length !== 1 ? "s" : ""}`;
 
   if (rows.length === 0) {
     tb.innerHTML = "";
